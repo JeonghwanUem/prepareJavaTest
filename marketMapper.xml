@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="market.dao.marketMapper">
+
+	<insert id="insertMarket" parameterType="market">
+		insert into
+		main(
+		title
+		,name
+		,sum
+		,indate
+		,limitdate
+		,buy
+		,sell
+		)values(
+		#{title}
+		,#{name}
+		,#{sum}
+		,#{indate}
+		,#{limitdate}
+		,#{buy}
+		,#{sell}
+		)
+
+	</insert>
+	
+	
+
+
+		<insert id="salesTable" parameterType="market">
+			insert into
+			sell_table(
+			title 
+			,name
+			,sell_num
+			,sell_date
+			)values(
+			#{title}
+			,#{name}
+			,#{sell_num}
+			,#{sell_date}
+			)
+
+		</insert>
+
+		<insert id="insertUser" parameterType="market">
+			insert into
+			usersinfo(<!-- 여기 테이블 명이랑 같게 해줘야 한다 깜빡함 -->
+			username
+			,phone
+			,address
+			,point
+			)values(
+			#{username}
+			,#{phone}
+			,#{address}
+			,#{point}
+			)
+		</insert>
+
+		<!-- <update id="updatePoint" parameterType="market"> update </update> -->
+
+
+
+		<select id="selectOneUser" parameterType="hashmap" resultType="market">
+			select
+			name
+			,phone
+			,address
+			,point
+			from
+			usersinfo
+			<where>
+				<if test="col == 1">
+					name like '%'||#{text}||'%'
+				</if>
+				<if test="col ==2">
+					phone like '%'||#{text}||'%'
+				</if>
+				<if test="col==3">
+					address like '%'||#{text}||'%'
+				</if>
+			</where>
+		</select>
+
+		<select id="selectPrice" parameterType="market" resultType="market">
+			select
+			*
+			from
+			main
+			where
+			product = #{product}
+		</select>
+
+		<select id="buyNow" parameterType="String" resultType="market">
+			select
+			title
+			,name
+			,sell
+			,sum
+			,limitdate
+			from
+			main
+			<where> <!-- where을 쓰냐 안쓰냐의 차이는 끝나는 지점이 달라진다는 것 -->
+			<if test="col == "><!-- #안써도 된다 테그 안에서는 -->
+			name like '%'||#{text}||'%'
+			</if>
+			<if test="col ==2">
+			board_content like '%'||#{text}||'%'
+			</if>
+			<if test="col==3">
+			board_name like '%'||#{text}||'%'
+			</if>
+		</where>
+
+		</select>
+
+		<insert id="insertSell" parameterType="String">
+			insert into
+			sell_table(
+			title
+			,name
+			,sell_num
+			,sell_date
+			,sell_money
+
+			)values(
+			#{title}
+			,#{name}
+			,#{sell_num}
+			,#{sell_date}
+			,#{sell_money}
+			)
+
+
+		</insert>
+
+		<select id="callprice" parameterType="market" resultType="market">
+			select
+			sell
+			from main
+			where name
+			=#{name}
+		</select>
+		
+		<delete id="deleteName" parameterType="market">
+		delete 
+		from 
+		main
+		where 
+		#{sum} = 0
+		</delete>
+		
+		<update id="updateSum" parameterType="market">
+		<!-- <![CDATA[ -->
+		update main
+		set sum = #{sum}
+		where sum>0
+		<!-- ]]> -->
+		</update>
+		
+		<select id="selectOneName" parameterType="market" resultType="market">
+		select 
+		title
+		,name
+		,price
+		,sum
+		,limitdate
+		from 
+		main
+		where name = #{name}
+		</select>
+		
+		<select id="AllMenu" resultType="market">
+		select
+		s.num
+		,m.title
+		,m.name
+		,m.sum
+		,m.sell
+		,to_char(m.indate,'YY/MM/DD')indate
+		,NVL(to_char(m.limitdate,'YY/MM/DD'),'없다능')limitdate
+		from
+		main m ,
+		sub_main s
+		where
+		s.title
+		= m.title
+
+	</select>
+	
+	<select id="selectSumAndSell" parameterType="String" resultType="market">
+		select 
+		sum
+		,sell
+		from
+		main
+		where 
+		name = #{name}
+	</select>
+	
+	<select id="selectAll"  resultType="market">
+		select 
+			title
+			,name
+			,sum
+			,indate
+			,limitdate
+			,buy
+			,sell
+		from 
+			main
+			
+	</select>
+	
+	<select id="selectUser" resultType="market">
+		select 
+			Username
+			,phone
+			,address
+			,point
+		from
+			usersinfo
+	
+	</select>
+
+
+</mapper>
